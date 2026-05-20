@@ -10,6 +10,161 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
+    background: #201E1C;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Gentium', serif;
+  }
+
+  #frame {
+    background: #282523;
+    border-radius: 20px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 420px;
+    margin: 2rem;
+  }
+
+  #controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2rem;
+  }
+
+  .sz {
+    background: none;
+    border: 0.5px solid #484442;
+    border-radius: 8px;
+    padding: 5px 16px;
+    font-family: 'Gentium', serif;
+    font-size: 15px;
+    color: #9A968F;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .sz:hover { color: #DDD8CE; border-color: #64605D; }
+  .sz.active { background: #373432; color: #EAE4D8; border-color: #64605D; font-weight: 500; }
+
+  #roll {
+    margin-left: auto;
+    background: none;
+    border: 0.5px solid #484442;
+    border-radius: 8px;
+    padding: 6px 24px;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: #9A968F;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+  #roll:hover { color: #EAE4D8; border-color: #64605D; background: #373432; }
+  #roll:active { transform: scale(0.97); }
+
+  #results {
+    border: 0.5px solid #3B3936;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    background: #2F2C2B;
+    transition: background 0.12s;
+    opacity: 0;
+    transform: translateY(4px);
+    animation: fadeup 0.2s forwards;
+  }
+  .item:hover { background: #343130; }
+  .item + .item { border-top: 0.5px solid #3B3936; }
+
+  @keyframes fadeup { to { opacity: 1; transform: none; } }
+
+  .num {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    color: #64605D;
+    min-width: 18px;
+    letter-spacing: 0.05em;
+  }
+  .name {
+    font-family: 'EB Garamond', serif;
+    font-size: 18px;
+    color: #EAE4D8;
+  }
+</style>
+</head>
+<body>
+
+<div id="frame">
+  <div id="controls">
+    <button class="sz" onclick="setSize(3)">3</button>
+    <button class="sz" onclick="setSize(5)">5</button>
+    <button class="sz" onclick="setSize(7)">7</button>
+    <button class="sz" onclick="setSize(9)">9</button>
+    <button id="roll" onclick="roll()">Draw</button>
+  </div>
+  <div id="results"></div>
+</div>
+
+<script>
+const LANGUAGES = [
+  "Classical Greek","Middle Mongol","Okinawan","Tagalog","Javanese",
+  "Kpelle","Bugis","Geʿez","Kikongo","French","Kreyòl Ayisyen",
+  "Japanese","Dutch","Corsican","Sardinian","Mandarin","Old Norse",
+  "Nunavik Inuktitut","Welsh","Lingìt","Somali","Dzongkha","Vai","Cherokee",
+  "Swahili","Basque","Tamaziɣt","Tswana","Gaeilge","English","Korean",
+  "Romanian","Latin","Georgian","isiXhosa","Vietnamese","Yoruba","Yucatec Maya",
+  "Mapuche","Tamil","Classical Nahuatl","Fɔngbè","Eʋegbe","Maltese",
+  "Quechua","Malagasy","Sinhala","Te Reo Māori","ʻōlelo Hawaiʻi","Rapa Nui",
+  "Farsi","Uzbek","Chaghatay","Guaraní","Pashto","Ojibwe","Wayuunaiki"
+];
+
+let currentSize = 5;
+
+function setSize(n) {
+  currentSize = n;
+  document.querySelectorAll('.sz').forEach(b => b.classList.toggle('active', parseInt(b.textContent) === n));
+  roll();
+}
+
+function roll() {
+  const a = [...LANGUAGES];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  document.getElementById('results').innerHTML = a.slice(0, currentSize).map((l, i) =>
+    `<div class="item" style="animation-delay:${i * 0.05}s">
+      <span class="num">${String(i+1).padStart(2,'0')}</span>
+      <span class="name">${l}</span>
+    </div>`
+  ).join('');
+}
+
+setSize(5);
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Language Picker Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
     background: #141412;
     min-height: 100vh;
     display: flex;
